@@ -155,6 +155,28 @@ mcpServer.tool(
   }
 );
 
+// Add generate-fake-user prompt
+mcpServer.prompt(
+  "generate-fake-user",
+  "Generate a fake user based on a given name",
+  {
+    name: z.string(),
+  },
+  ({ name }) => {
+    return {
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: `Generate a fake user with the name ${name}. The user should have a realistic email, address, and phone number.`,
+          },
+        },
+      ],
+    };
+  }
+);
+
 async function main() {
   const transport = new StdioServerTransport();
   await mcpServer.connect(transport);
