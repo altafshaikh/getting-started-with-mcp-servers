@@ -1,4 +1,7 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import {
+  McpServer,
+  ResourceTemplate,
+} from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import fs from "fs/promises";
@@ -37,6 +40,85 @@ const mcpServer = new McpServer({
     prompts: {},
   },
 });
+
+// Add users resource
+mcpServer.resource(
+  "users",
+  "users://all",
+  {
+    description: "Get all users data from the database",
+    title: "Users",
+    mimeType: "application/json",
+  },
+  async (uri) => {
+    const usersData = await fs.readFile(usersFilePath, "utf-8");
+    const users = JSON.parse(usersData);
+
+    return {
+      contents: [
+        {
+          uri: uri.href,
+          text: JSON.stringify(users),
+          mimeType: "application/json",
+        },
+      ],
+    };
+  }
+);
+
+// Add user-details resource with dynamic userId parameter
+mcpServer.resource(
+  "user-details",
+  new ResourceTemplate("users://{userId}/profile", { list: undefined }),
+  {
+    description: "Get a user's details from the database",
+    title: "User Details",
+    mimeType: "application/json",
+  },
+  async (uri, { userId }) => {
+    try {
+      const usersData = await fs.readFile(usersFilePath, "utf-8");
+      const users = JSON.parse(usersData);
+
+      // Find user by ID
+      const user = users.find((u) => u.id === parseInt(userId));
+
+      if (!user) {
+        return {
+          contents: [
+            {
+              uri: uri.href,
+              text: JSON.stringify({
+                error: `User with ID ${userId} not found`,
+              }),
+              mimeType: "application/json",
+            },
+          ],
+        };
+      }
+
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            text: JSON.stringify(user),
+            mimeType: "application/json",
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        contents: [
+          {
+            uri: uri.href,
+            text: JSON.stringify({ error: "Failed to read user data" }),
+            mimeType: "application/json",
+          },
+        ],
+      };
+    }
+  }
+);
 
 mcpServer.tool(
   "create-user",
