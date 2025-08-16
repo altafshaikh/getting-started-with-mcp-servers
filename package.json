@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
+    "client": "node src/client.js",
     "inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector npm run dev"
   },
   "keywords": [
@@ -22,7 +23,12 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.3",
-    "zod": "^3.25.76"
+    "zod": "^3.25.76",
+    "@ai-sdk/google": "^1.0.1",
+    "@inquirer/prompts": "^5.5.0",
+    "@modelcontextprotocol/sdk": "^1.17.3",
+    "ai": "^3.4.32",
+    "dotenv": "^16.4.7"
   },
   "devDependencies": {
     "@modelcontextprotocol/inspector": "^0.16.4"
