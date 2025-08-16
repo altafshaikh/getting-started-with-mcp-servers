@@ -1,0 +1,29 @@
+{
+  "name": "getting-started-with-mcp-servers",
+  "version": "1.0.0",
+  "description": "A JavaScript project boilerplate with modern development tools",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "inspect": "set DANGEROUSLY_OMIT_AUTH=true && npx @modelcontextprotocol/inspector npm run dev"
+  },
+  "keywords": [
+    "javascript",
+    "node",
+    "es6",
+    "boilerplate"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.3"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.16.4"
+  }
+}
